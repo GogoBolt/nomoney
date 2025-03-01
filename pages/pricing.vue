@@ -13,8 +13,33 @@
       <div class="container mx-auto px-4">
         <div class="flex flex-col items-center mb-12">
           <div class="inline-flex items-center bg-gray-100 rounded-full p-1 mb-8">
-            <button class="px-6 py-2 rounded-full bg-primary text-white">Facturation mensuelle</button>
-            <button class="px-6 py-2 rounded-full text-gray-700">Facturation annuelle</button>
+          <!-- Bouton Facturation mensuelle -->
+    <button
+      :class="[
+        'px-6 py-2 rounded-full transition-colors duration-300 flex items-center space-x-2',
+        activeButton === 'monthly' ? 'bg-primary text-white' : 'text-gray-700'
+      ]"
+      @click="setActiveButton('monthly')"
+    >
+      <span>Facturation mensuelle</span>
+      <svg v-if="activeButton === 'monthly'" class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+      </svg>
+    </button>
+
+    <!-- Bouton Facturation annuelle -->
+    <button
+      :class="[
+        'px-6 py-2 rounded-full transition-colors duration-300 flex items-center space-x-2',
+        activeButton === 'yearly' ? 'bg-primary text-white' : 'text-gray-700'
+      ]"
+      @click="setActiveButton('yearly')"
+    >
+      <span>Facturation annuelle</span>
+      <svg v-if="activeButton === 'yearly'" class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+      </svg>
+    </button>
           </div>
           <p class="text-gray-600 text-center max-w-xl">Économisez jusqu'à 20% avec nos formules annuelles. Tous les prix sont affichés hors taxes.</p>
         </div>
@@ -234,3 +259,15 @@
     </section>
   </div>
 </template>
+
+<script setup>
+import { ref } from 'vue';
+
+// Référence pour stocker le bouton actif
+const activeButton = ref('monthly'); // Par défaut, "Facturation mensuelle" est active
+
+// Fonction pour définir le bouton actif
+const setActiveButton = (button) => {
+  activeButton.value = button;
+};
+</script>

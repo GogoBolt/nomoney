@@ -74,8 +74,8 @@
     </section>
 
     <!-- How It Works Section -->
-    <section class="py-12 bg-gray-100">
-      <div class="container mx-auto px-4">
+    <section class="py-12  ">
+      <div class="container  mx-auto   px-4 rounded-lg shadow-md">
         <div class="text-center mb-12">
           <h2 class="text-3xl font-bold mb-4">Comment ça marche ?</h2>
           <p class="text-gray-600 max-w-2xl mx-auto">Un processus simple et efficace pour tous les utilisateurs.</p>
@@ -95,6 +95,11 @@
             <p class="text-gray-600">{{ step.description }}</p>
           </div>
         </div>
+      </div>
+    </section>
+    <section>
+      <div class="container mx-auto py-4">
+
       </div>
     </section>
 

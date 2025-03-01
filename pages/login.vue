@@ -1,8 +1,8 @@
 <template>
   <div>
     <NuxtLayout name="auth">
-      <h2 class="text-2xl font-bold mb-6 text-center">Connexion</h2>
-      <div v-if="error" class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
+      <h2 class="text-2xl font-bold mb-14 text-center">Connexion</h2>
+      <div v-if="error" class="bg-red-100 border border-red-400 text-red-700 px-4 py-4 rounded mb-4">
         {{ error }}
       </div>
       <form @submit.prevent="login" class="space-y-4">
