@@ -13,11 +13,11 @@
       <div class="container mx-auto px-4">
         <div class="flex flex-col items-center mb-12">
           <div class="inline-flex items-center bg-gray-100 rounded-full p-1 mb-8">
-          <!-- Bouton Facturation mensuelle -->
+             <!-- Bouton Facturation mensuelle -->
     <button
       :class="[
         'px-6 py-2 rounded-full transition-colors duration-300 flex items-center space-x-2',
-        activeButton === 'monthly' ? 'bg-primary text-white' : 'text-gray-700'
+        activeButton === 'monthly' ? 'bg-primary text-white' : 'bg-white text-gray-700'
       ]"
       @click="setActiveButton('monthly')"
     >
@@ -31,7 +31,7 @@
     <button
       :class="[
         'px-6 py-2 rounded-full transition-colors duration-300 flex items-center space-x-2',
-        activeButton === 'yearly' ? 'bg-primary text-white' : 'text-gray-700'
+        activeButton === 'yearly' ? 'bg-primary text-white' : 'bg-white text-gray-700'
       ]"
       @click="setActiveButton('yearly')"
     >
@@ -260,14 +260,14 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { ref } from 'vue';
 
 // Référence pour stocker le bouton actif
 const activeButton = ref('monthly'); // Par défaut, "Facturation mensuelle" est active
 
 // Fonction pour définir le bouton actif
-const setActiveButton = (button) => {
+const setActiveButton = (button:any) => {
   activeButton.value = button;
 };
 </script>

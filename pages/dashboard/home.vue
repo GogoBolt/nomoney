@@ -1,11 +1,11 @@
 <template>
   <div>
     <h1 class="text-2xl font-bold mb-6">Tableau de bord</h1>
-    
+
     <div v-if="isLoading" class="flex justify-center items-center h-64">
       <div class="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary"></div>
     </div>
-    
+
     <template v-else>
       <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
         <div class="card bg-white">
@@ -21,7 +21,7 @@
             </div>
           </div>
         </div>
-        
+
         <div class="card bg-white">
           <div class="flex items-center">
             <div class="p-3 rounded-full bg-green-100">
@@ -35,7 +35,7 @@
             </div>
           </div>
         </div>
-        
+
         <div class="card bg-white">
           <div class="flex items-center">
             <div class="p-3 rounded-full bg-blue-100">
@@ -51,7 +51,7 @@
           </div>
         </div>
       </div>
-      
+
       <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <div class="card bg-white">
           <h2 class="text-lg font-semibold mb-4">Activité récente</h2>
@@ -79,7 +79,7 @@
             </div>
           </div>
         </div>
-        
+
         <div class="card bg-white">
           <h2 class="text-lg font-semibold mb-4">Consommation mensuelle</h2>
           <div class="h-64">
@@ -92,7 +92,7 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { ref, onMounted, computed } from 'vue';
 import { useNhostClient } from '@nhost/vue';
 import { useAuthStore } from '~/composables/useAuth';
@@ -111,9 +111,9 @@ const totalBalance = computed(() => {
 const mealCount = computed(() => {
   const now = new Date();
   const firstDayOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
-  
-  return transactions.value.filter(t => 
-    t.type === 'meal' && 
+
+  return transactions.value.filter(t =>
+    t.type === 'meal' &&
     new Date(t.created_at) >= firstDayOfMonth
   ).length;
 });
@@ -121,9 +121,9 @@ const mealCount = computed(() => {
 const transportCount = computed(() => {
   const now = new Date();
   const firstDayOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
-  
-  return transactions.value.filter(t => 
-    t.type === 'transport' && 
+
+  return transactions.value.filter(t =>
+    t.type === 'transport' &&
     new Date(t.created_at) >= firstDayOfMonth
   ).length;
 });
@@ -142,7 +142,7 @@ onMounted(async () => {
 
 async function fetchData() {
   isLoading.value = true;
-  
+
   try {
     // Récupérer les élèves du parent connecté
     if (authStore.userRole === 'parent') {
@@ -161,16 +161,16 @@ async function fetchData() {
           parentId: authStore.user.id
         }
       });
-      
+
       if (studentsError) {
         throw new Error(studentsError.message);
       }
-      
+
       students.value = studentsData.students;
-      
+
       // Récupérer les transactions des élèves
       const studentIds = students.value.map(s => s.id);
-      
+
       if (studentIds.length > 0) {
         const { data: transactionsData, error: transactionsError } = await nhost.graphql.request(`
           query GetTransactions($studentIds: [uuid!]) {
@@ -195,11 +195,11 @@ async function fetchData() {
             studentIds
           }
         });
-        
+
         if (transactionsError) {
           throw new Error(transactionsError.message);
         }
-        
+
         transactions.value = transactionsData.transactions;
       }
     }
@@ -217,7 +217,7 @@ function getActivityTypeClass(type) {
     transport: 'bg-blue-100',
     recharge: 'bg-green-100'
   };
-  
+
   return classes[type] || 'bg-gray-100';
 }
 
@@ -227,7 +227,7 @@ function getActivityIconColor(type) {
     transport: 'text-blue-600',
     recharge: 'text-green-600'
   };
-  
+
   return colors[type] || 'text-gray-600';
 }
 
@@ -237,7 +237,7 @@ function getTransactionDescription(transaction) {
     transport: 'Trajet effectué',
     recharge: 'Rechargement de compte'
   };
-  
+
   return descriptions[transaction.type] || 'Transaction';
 }
 
@@ -250,7 +250,7 @@ function getTransactionDetails(transaction) {
     const paymentMethod = transaction.metadata?.payment_method || 'Carte bancaire';
     return `${paymentMethod} - ${transaction.amount.toFixed(2)} €`;
   }
-  
+
   return '';
 }
 
@@ -259,7 +259,7 @@ function formatDate(dateString) {
   const now = new Date();
   const yesterday = new Date(now);
   yesterday.setDate(now.getDate() - 1);
-  
+
   if (date.toDateString() === now.toDateString()) {
     return `Aujourd'hui, ${date.getHours()}:${String(date.getMinutes()).padStart(2, '0')}`;
   } else if (date.toDateString() === yesterday.toDateString()) {

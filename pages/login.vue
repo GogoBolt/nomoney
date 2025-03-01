@@ -40,7 +40,7 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
 import { useNuxtApp } from '#app';
@@ -48,7 +48,7 @@ import { useNuxtApp } from '#app';
 const email = ref('');
 const password = ref('');
 const rememberMe = ref(false);
-const error = ref(null);
+const error = ref<string | null>(null);
 const isLoading = ref(false);
 const router = useRouter();
 const { $nhost } = useNuxtApp();
@@ -77,8 +77,11 @@ async function login() {
     // Rediriger vers le tableau de bord après une connexion réussie
     router.push('/dashboard/home');
   } catch (err) {
-    error.value = err.message || 'Une erreur est survenue';
-  } finally {
+    if (err instanceof Error) {
+      error.value = err.message;
+    }
+}
+ finally {
     isLoading.value = false;
   }
 }

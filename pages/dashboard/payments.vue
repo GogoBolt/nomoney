@@ -1,11 +1,11 @@
 <template>
   <div>
     <h1 class="text-2xl font-bold mb-6">Solde et Paiements</h1>
-    
+
     <div v-if="isLoading" class="flex justify-center items-center h-64">
       <div class="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary"></div>
     </div>
-    
+
     <template v-else>
       <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
         <div class="card bg-white">
@@ -21,7 +21,7 @@
               <p class="text-sm text-gray-500">Solde total de tous les comptes</p>
             </div>
           </div>
-          
+
           <div v-if="students.length > 0">
             <h3 class="text-md font-medium mb-2">Détail par élève</h3>
             <div class="space-y-3">
@@ -42,15 +42,15 @@
             </div>
           </div>
         </div>
-        
+
         <div class="card bg-white">
           <h2 class="text-lg font-semibold mb-4">Recharger un compte</h2>
           <div v-if="!selectedStudent" class="text-center py-8">
             <p class="text-gray-500 mb-4">Sélectionnez un élève pour recharger son compte</p>
             <div class="space-y-3">
-              <button 
-                v-for="student in students" 
-                :key="student.id" 
+              <button
+                v-for="student in students"
+                :key="student.id"
                 @click="selectStudentForRecharge(student)"
                 class="btn btn-outline w-full"
               >
@@ -58,7 +58,7 @@
               </button>
             </div>
           </div>
-          
+
           <form v-else @submit.prevent="rechargeAccount" class="space-y-4">
             <div>
               <label class="block text-sm font-medium text-gray-700 mb-1">Élève</label>
@@ -66,20 +66,20 @@
                 {{ selectedStudent.first_name }} {{ selectedStudent.last_name }}
               </div>
             </div>
-            
+
             <div>
               <label for="amount" class="block text-sm font-medium text-gray-700 mb-1">Montant (€)</label>
-              <input 
-                id="amount" 
-                v-model.number="rechargeAmount" 
-                type="number" 
-                min="5" 
-                step="5" 
-                required 
+              <input
+                id="amount"
+                v-model.number="rechargeAmount"
+                type="number"
+                min="5"
+                step="5"
+                required
                 class="input"
               />
             </div>
-            
+
             <div>
               <label for="paymentMethod" class="block text-sm font-medium text-gray-700 mb-1">Moyen de paiement</label>
               <select id="paymentMethod" v-model="paymentMethod" required class="input">
@@ -88,14 +88,14 @@
                 <option value="bank_transfer">Virement bancaire</option>
               </select>
             </div>
-            
+
             <div class="pt-4">
               <button type="submit" class="btn btn-primary w-full" :disabled="isProcessing">
                 {{ isProcessing ? 'Traitement en cours...' : 'Recharger le compte' }}
               </button>
-              <button 
-                type="button" 
-                @click="cancelRecharge" 
+              <button
+                type="button"
+                @click="cancelRecharge"
                 class="btn text-gray-500 hover:text-gray-700 w-full mt-2"
                 :disabled="isProcessing"
               >
@@ -105,7 +105,7 @@
           </form>
         </div>
       </div>
-      
+
       <div class="card bg-white">
         <h2 class="text-lg font-semibold mb-4">Historique des transactions</h2>
         <div v-if="transactions.length === 0" class="text-center text-gray-500 py-8">
@@ -154,7 +154,7 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { ref, computed, onMounted } from 'vue';
 import { useNhostClient } from '@nhost/vue';
 import { useAuthStore } from '~/composables/useAuth';
@@ -186,17 +186,17 @@ onMounted(async () => {
 
 async function fetchData() {
   isLoading.value = true;
-  
+
   try {
     // Récupérer les élèves du parent connecté
     const studentsResult = await studentService.getStudentsByParent(authStore.user.id);
-    
+
     if (studentsResult.success) {
       students.value = studentsResult.students;
-      
+
       // Récupérer les transactions des élèves
       const studentIds = students.value.map(s => s.id);
-      
+
       if (studentIds.length > 0) {
         const { data, error } = await nhost.graphql.request(`
           query GetTransactions($studentIds: [uuid!]) {
@@ -222,11 +222,11 @@ async function fetchData() {
             studentIds
           }
         });
-        
+
         if (error) {
           throw new Error(error.message);
         }
-        
+
         transactions.value = data.transactions;
       }
     } else {
@@ -252,26 +252,26 @@ async function rechargeAccount() {
   if (!selectedStudent.value || rechargeAmount.value <= 0) {
     return;
   }
-  
+
   isProcessing.value = true;
-  
+
   try {
     const result = await studentService.rechargeStudentBalance(
       selectedStudent.value.id,
       rechargeAmount.value,
       paymentMethod.value
     );
-    
+
     if (result.success) {
       // Mettre à jour le solde de l'élève dans la liste
       const studentIndex = students.value.findIndex(s => s.id === selectedStudent.value.id);
       if (studentIndex !== -1) {
         students.value[studentIndex].balance = result.newBalance;
       }
-      
+
       // Ajouter la transaction à la liste
       await fetchData();
-      
+
       // Réinitialiser le formulaire
       selectedStudent.value = null;
       rechargeAmount.value = 20;
@@ -297,7 +297,7 @@ function formatTransactionType(type) {
     transport: 'Transport',
     recharge: 'Rechargement'
   };
-  
+
   return types[type] || type;
 }
 

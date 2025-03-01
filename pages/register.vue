@@ -59,7 +59,7 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
 import { useNuxtApp } from '#app';
@@ -71,10 +71,10 @@ const userType = ref('parent');
 const password = ref('');
 const confirmPassword = ref('');
 const acceptTerms = ref(false);
-const error = ref(null);
 const isLoading = ref(false);
 const router = useRouter();
 const { $nhost } = useNuxtApp();
+const error = ref<string | null>(null);
 
 async function register() {
   // Validation des champs
@@ -139,13 +139,16 @@ async function register() {
     );
 
     if (gqlError) {
-      throw new Error(gqlError.message);
-    }
+  throw new Error(Array.isArray(gqlError) ? gqlError[0]?.message || 'Erreur inconnue' : gqlError.message);
+}
 
     // Rediriger vers le tableau de bord
     router.push('/dashboard/home');
   } catch (err) {
-    error.value = err.message || 'Une erreur est survenue';
+  if (err instanceof Error) {
+    error.value = err.message;
+  } else {
+    error.value = 'Une erreur est survenue'; }
 
     // Si l'utilisateur a été créé mais que la création du profil a échoué, on le déconnecte
     if ($nhost.auth.isAuthenticated()) {

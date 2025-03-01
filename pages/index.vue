@@ -1,53 +1,52 @@
 <template>
-  <div>
+  <div  >
     <!-- Hero Section -->
-    <section
-      class="py-12 md:py-20 bg-gradient-to-r from-primary to-primary-dark text-white"
+    <section id="section1"
+  class="py-10 md:py-16 bg-gradient-to-r from-primary to-primary-dark text-white"
+>
+  <div class="container mx-auto px-4">
+    <div
+      class="flex flex-col md:flex-row items-center"
+      v-motion-fade-visible
     >
-      <div class="container mx-auto px-4">
-        <div
-          class="flex flex-col md:flex-row items-center"
-          v-motion-fade-visible
+      <div class="md:w-1/2 mb-8 md:mb-0 text-center md:text-left">
+        <h1
+          class="text-4xl md:text-5xl font-bold mb-4"
+          v-motion-pop-visible
         >
-          <div class="md:w-1/2 mb-8 md:mb-0 text-center md:text-left">
-            <h1
-              class="text-4xl md:text-5xl font-bold mb-4"
-              v-motion-pop-visible
-            >
-              NO-Money Just QR-Code
-            </h1>
-            <p class="text-xl mb-6">Simplifiez la gestion de votre cantine et transport scolaire avec notre solution QR Code innovante.</p>
-            <div
-              class="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4"
-            >
-              <NuxtLink
-                to="/register"
-                class="btn bg-white text-primary hover:bg-gray-100 transition-transform transform hover:scale-105"
-              >
-                Commencer maintenant
-              </NuxtLink>
-              <NuxtLink
-                to="/features"
-                class="btn border border-white text-white hover:bg-white hover:text-primary transition-transform transform hover:scale-105"
-              >
-                En savoir plus
-              </NuxtLink>
-            </div>
-          </div>
-          <div class="md:w-1/2 flex justify-center">
-            <img
-              src="~/assets/images/logo1.png"
-              style="height: 400px; width: 450px"
-              alt="NO-Money Just QR-Code"
-              class="w-full drop-shadow-lg animate-fade-in"
-            />
-          </div>
+          NO-Money Just QR-Code
+        </h1>
+        <p class="text-xl mb-6">Simplifiez la gestion de votre cantine et transport scolaire avec notre solution QR Code innovante.</p>
+        <div
+          class="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4"
+        >
+          <NuxtLink
+            to="/register"
+            class="btn bg-white text-primary hover:bg-gray-100 transition-transform transform hover:scale-105"
+          >
+            Commencer maintenant
+          </NuxtLink>
+          <NuxtLink
+            to="/features"
+            class="btn border border-white text-white hover:bg-white hover:text-primary transition-transform transform hover:scale-105"
+          >
+            En savoir plus
+          </NuxtLink>
         </div>
       </div>
-    </section>
-
+      <div class="md:w-1/2 flex justify-center">
+        <img
+          src="~/assets/images/logo1.png"
+          style="height: 300px; width: 350px"
+          alt="NO-Money Just QR-Code"
+          class="w-full drop-shadow-lg animate-fade-in"
+        />
+      </div>
+    </div>
+  </div>
+</section>
     <!-- Features Section -->
-    <section class="py-12 bg-white">
+    <section id="section2" class="py-12 bg-white">
       <div class="container mx-auto px-4">
         <div class="text-center mb-12">
           <h2 class="text-3xl font-bold mb-4">Fonctionnalités principales</h2>
@@ -74,7 +73,7 @@
     </section>
 
     <!-- How It Works Section -->
-    <section class="py-12  ">
+    <section id="section3" class="py-8  ">
       <div class="container  mx-auto   px-4 rounded-lg shadow-md">
         <div class="text-center mb-12">
           <h2 class="text-3xl font-bold mb-4">Comment ça marche ?</h2>
@@ -97,14 +96,10 @@
         </div>
       </div>
     </section>
-    <section>
-      <div class="container mx-auto py-4">
 
-      </div>
-    </section>
 
     <!-- CTA Section -->
-    <section class="py-12 bg-primary text-white">
+    <section id="section4"      class="py-12 bg-primary text-white">
       <div class="container mx-auto px-4 text-center">
         <h2
           class="text-3xl font-bold mb-4"
@@ -139,7 +134,7 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { ref } from 'vue';
 import { CreditCardIcon, QrCodeIcon, ClockIcon } from '@heroicons/vue/24/outline';
 
@@ -183,7 +178,10 @@ const steps = ref([
     description: 'Les élèves utilisent leur QR Code pour la cantine et le transport.'
   }
 ]);
+
+
 </script>
+
 
 <style>
 .animate-fade-in {

@@ -1,7 +1,7 @@
 <template>
   <div>
     <h1 class="text-2xl font-bold mb-6">Scanner QR Code</h1>
-    
+
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
       <div class="card bg-white">
         <h2 class="text-lg font-semibold mb-4">Scanner un QR Code</h2>
@@ -33,7 +33,7 @@
           </div>
         </div>
       </div>
-      
+
       <div class="card bg-white">
         <h2 class="text-lg font-semibold mb-4">Résultat du scan</h2>
         <div v-if="scanResult" class="space-y-4">
@@ -51,7 +51,7 @@
               </p>
             </div>
           </div>
-          
+
           <div v-if="scanResult.student" class="border border-gray-200 rounded-lg p-4">
             <div class="grid grid-cols-2 gap-4">
               <div>
@@ -74,7 +74,7 @@
               </div>
             </div>
           </div>
-          
+
           <div v-if="scanResult.success && scanResult.student" class="flex space-x-4">
             <button @click="validateTransaction('meal')" class="btn btn-primary flex-1" :disabled="isValidating">
               {{ isValidating ? 'Validation...' : 'Valider repas' }}
@@ -93,7 +93,7 @@
         </div>
       </div>
     </div>
-    
+
     <div class="mt-6 card bg-white">
       <h2 class="text-lg font-semibold mb-4">Historique des scans récents</h2>
       <div v-if="isLoading" class="flex justify-center items-center h-32">
@@ -138,7 +138,7 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { ref, onMounted } from 'vue';
 import { QrcodeStream } from 'vue-qrcode-reader';
 import { useNhostClient } from '@nhost/vue';
@@ -166,7 +166,7 @@ onMounted(async () => {
 
 async function fetchRecentScans() {
   isLoading.value = true;
-  
+
   try {
     const { data, error } = await nhost.graphql.request(`
       query GetRecentTransactions {
@@ -187,11 +187,11 @@ async function fetchRecentScans() {
         }
       }
     `);
-    
+
     if (error) {
       throw new Error(error.message);
     }
-    
+
     recentScans.value = data.transactions;
   } catch (error) {
     console.error('Error fetching recent scans:', error);
@@ -238,11 +238,11 @@ async function onDecode(content) {
     `, {
       variables: { code: content }
     });
-    
+
     if (error) {
       throw new Error(error.message);
     }
-    
+
     if (data.qr_codes.length === 0) {
       scanResult.value = {
         success: false,
@@ -250,9 +250,9 @@ async function onDecode(content) {
       };
       return;
     }
-    
+
     const qrCode = data.qr_codes[0];
-    
+
     scanResult.value = {
       success: true,
       student: qrCode.student,
@@ -271,12 +271,12 @@ async function validateTransaction(type) {
   if (!scanResult.value || !scanResult.value.success || !scanResult.value.student) {
     return;
   }
-  
+
   isValidating.value = true;
-  
+
   try {
     const result = await qrCodeService.validateQrCodeScan(scanResult.value.qrCodeId, type);
-    
+
     if (result.success) {
       scanResult.value = {
         ...scanResult.value,
@@ -284,7 +284,7 @@ async function validateTransaction(type) {
         student: result.student,
         transaction: result.transaction
       };
-      
+
       // Mettre à jour l'historique des scans
       await fetchRecentScans();
     } else {
@@ -311,7 +311,7 @@ function formatTransactionType(type) {
     meal: 'Repas',
     transport: 'Transport'
   };
-  
+
   return types[type] || type;
 }
 

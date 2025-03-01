@@ -1,5 +1,8 @@
 <template>
-  <footer class="bg-gray-800 text-white py-12">
+  <footer  :class="[
+      'bg-gray-800 text-white py-8 transition-all duration-300',
+      isFooterExpanded ? 'h-auto' : 'h-24 overflow-hidden'
+    ]" >
     <div class="container mx-auto px-4">
       <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
         <div>
@@ -34,3 +37,28 @@
     </div>
   </footer>
 </template>
+
+<script setup lang="ts">
+import { ref, onMounted, onUnmounted } from 'vue';
+
+// État pour vérifier si le footer doit être étendu
+const isFooterExpanded = ref(false);
+
+// Fonction pour vérifier si l'utilisateur est en bas de la page
+const checkIfAtBottom = () => {
+  const scrollY = window.scrollY;
+  const windowHeight = window.innerHeight;
+  const documentHeight = document.documentElement.scrollHeight;
+  isFooterExpanded.value = scrollY + windowHeight >= documentHeight - 100;
+};
+
+// Écouter le scroll pour vérifier si l'utilisateur est en bas de la page
+onMounted(() => {
+  window.addEventListener('scroll', checkIfAtBottom);
+  checkIfAtBottom(); // Vérifier l'état initial
+});
+
+onUnmounted(() => {
+  window.removeEventListener('scroll', checkIfAtBottom);
+});
+</script>
