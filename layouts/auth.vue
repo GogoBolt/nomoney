@@ -5,13 +5,14 @@
         <NuxtLink to="/" class="inline-block">
           <div class="flex items-center">
             <NuxtLink to="/" class="flex items-center space-x-3">
-    <img
-      class=" rounded-lg shadow-md transform hover:scale-105 transition duration-300"
-      :src="selectedImage"
-      alt="NO-Money Just QR-Code"
-    />
-  </NuxtLink>
-        </div>
+              <img
+                class="rounded-lg shadow-md transform hover:scale-105 transition duration-300"
+                :src="selectedImage"
+                alt="NO-Money Just QR-Code"
+                loading="lazy"
+              />
+            </NuxtLink>
+          </div>
         </NuxtLink>
       </div>
       <div class="bg-white rounded-lg shadow-lg p-8">
@@ -24,7 +25,7 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue';
 
-// Liste des images disponibles
+// Liste des images disponibles (utilisez des formats optimisés comme WebP)
 const images = [
   '/images/1.jpg',
   '/images/2.jpg',
