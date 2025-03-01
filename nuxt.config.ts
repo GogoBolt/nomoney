@@ -28,9 +28,9 @@ export default defineNuxtConfig({
   },
   runtimeConfig: {
     public: {
-      nhostSubdomain: process.env.NHOST_SUBDOMAIN || '',
-      nhostRegion: process.env.NHOST_REGION || ''
+      nhostSubdomain: process.env.NUXT_NHOST_SUBDOMAIN || 'local',
+      nhostRegion: process.env.NUXT_NHOST_REGION || 'local'
     },
-    nhostAdminSecret: process.env.NHOST_ADMIN_SECRET || ''
+    nhostAdminSecret: process.env.NHOST_HASURA_GRAPHQL_ADMIN_SECRET || 'nhost-admin-secret'
   }
 })

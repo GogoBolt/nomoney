@@ -60,6 +60,10 @@
 </template>
 
 <script setup>
+import { ref } from 'vue';
+import { useRouter } from 'vue-router';
+import { useNuxtApp } from '#app';
+
 const firstName = ref('');
 const lastName = ref('');
 const email = ref('');
@@ -70,8 +74,7 @@ const acceptTerms = ref(false);
 const error = ref(null);
 const isLoading = ref(false);
 const router = useRouter();
-const authStore = useAuthStore();
-const nhost = useNhostClient();
+const { $nhost } = useNuxtApp();
 
 async function register() {
   // Validation des champs
@@ -79,31 +82,41 @@ async function register() {
     error.value = 'Veuillez remplir tous les champs obligatoires';
     return;
   }
-  
+
   if (password.value !== confirmPassword.value) {
     error.value = 'Les mots de passe ne correspondent pas';
     return;
   }
-  
+
   if (!acceptTerms.value) {
     error.value = 'Vous devez accepter les conditions d\'utilisation';
     return;
   }
-  
+
   isLoading.value = true;
   error.value = null;
-  
+
   try {
     // Créer l'utilisateur avec Nhost
-    const result = await authStore.signUp(email.value, password.value, {
-      firstName: firstName.value,
-      lastName: lastName.value,
-      role: userType.value
+    const { session, error: signUpError } = await $nhost.auth.signUp({
+      email: email.value,
+      password: password.value,
+      options: {
+        metadata: {
+          firstName: firstName.value,
+          lastName: lastName.value,
+          role: userType.value,
+        },
+      },
     });
-    
-    if (result.success) {
-      // Créer le profil utilisateur dans la base de données
-      const { data, error: gqlError } = await nhost.graphql.request(`
+
+    if (signUpError) {
+      throw signUpError;
+    }
+
+    // Créer le profil utilisateur dans la base de données
+    const { data, error: gqlError } = await $nhost.graphql.request(
+      `
         mutation CreateUserProfile($userId: uuid!, $firstName: String!, $lastName: String!, $userType: String!) {
           insert_profiles_one(object: {
             user_id: $userId,
@@ -114,29 +127,29 @@ async function register() {
             id
           }
         }
-      `, {
+      `,
+      {
         variables: {
-          userId: authStore.user.id,
+          userId: session?.user?.id, // Utiliser l'ID de l'utilisateur créé
           firstName: firstName.value,
           lastName: lastName.value,
-          userType: userType.value
-        }
-      });
-      
-      if (gqlError) {
-        throw new Error(gqlError.message);
+          userType: userType.value,
+        },
       }
-      
-      // Rediriger vers le tableau de bord
-      router.push('/dashboard/home');
-    } else {
-      error.value = result.error || 'Erreur lors de l\'inscription';
+    );
+
+    if (gqlError) {
+      throw new Error(gqlError.message);
     }
+
+    // Rediriger vers le tableau de bord
+    router.push('/dashboard/home');
   } catch (err) {
     error.value = err.message || 'Une erreur est survenue';
+
     // Si l'utilisateur a été créé mais que la création du profil a échoué, on le déconnecte
-    if (authStore.isAuthenticated) {
-      await authStore.signOut();
+    if ($nhost.auth.isAuthenticated()) {
+      await $nhost.auth.signOut();
     }
   } finally {
     isLoading.value = false;

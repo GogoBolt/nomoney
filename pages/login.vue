@@ -41,31 +41,41 @@
 </template>
 
 <script setup>
+import { ref } from 'vue';
+import { useRouter } from 'vue-router';
+import { useNuxtApp } from '#app';
+
 const email = ref('');
 const password = ref('');
 const rememberMe = ref(false);
 const error = ref(null);
 const isLoading = ref(false);
 const router = useRouter();
-const authStore = useAuthStore();
+const { $nhost } = useNuxtApp();
 
 async function login() {
+  // Validation des champs
   if (!email.value || !password.value) {
     error.value = 'Veuillez remplir tous les champs';
     return;
   }
-  
+
   isLoading.value = true;
   error.value = null;
-  
+
   try {
-    const result = await authStore.signIn(email.value, password.value);
-    
-    if (result.success) {
-      router.push('/dashboard/home');
-    } else {
-      error.value = result.error || 'Erreur de connexion';
+    // Connexion avec Nhost
+    const { session, error: signInError } = await $nhost.auth.signIn({
+      email: email.value,
+      password: password.value,
+    });
+
+    if (signInError) {
+      throw signInError;
     }
+
+    // Rediriger vers le tableau de bord après une connexion réussie
+    router.push('/dashboard/home');
   } catch (err) {
     error.value = err.message || 'Une erreur est survenue';
   } finally {
