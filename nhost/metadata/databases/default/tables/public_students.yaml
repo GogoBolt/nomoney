@@ -1,0 +1,27 @@
+table:
+  name: students
+  schema: public
+object_relationships:
+  - name: parent
+    using:
+      manual_configuration:
+        column_mapping:
+          parent_id: user_id
+        remote_table:
+          name: profiles
+          schema: public
+array_relationships:
+  - name: qr_codes
+    using:
+      foreign_key_constraint_on:
+        column: student_id
+        table:
+          name: qr_codes
+          schema: public
+  - name: transactions
+    using:
+      foreign_key_constraint_on:
+        column: student_id
+        table:
+          name: transactions
+          schema: public

@@ -1,0 +1,67 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:14
+    restart: always
+    environment:
+      POSTGRES_DB: local
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      retries: 5
+
+  nhost:
+    image: nhost/nhost:latest
+    restart: always
+    ports:
+      - "1337:1337"
+      - "8080:8080"
+    environment:
+      NHOST_SUBDOMAIN: local
+      NHOST_REGION: local
+      NHOST_BACKEND_URL: http://localhost:1337
+      NHOST_HASURA_GRAPHQL_URL: http://localhost:8080/v1/graphql
+      NHOST_HASURA_GRAPHQL_ADMIN_SECRET: ${HASURA_GRAPHQL_ADMIN_SECRET}
+      NHOST_HASURA_GRAPHQL_JWT_SECRET: ${HASURA_GRAPHQL_JWT_SECRET}
+      NHOST_WEBHOOK_SECRET: ${NHOST_WEBHOOK_SECRET}
+      NHOST_DATABASE_URL: postgres://postgres:postgres@postgres:5432/local
+    volumes:
+      - ./nhost:/app
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    environment:
+      NUXT_PUBLIC_NHOST_SUBDOMAIN: local
+      NUXT_PUBLIC_NHOST_REGION: local
+      NUXT_PUBLIC_NHOST_BACKEND_URL: http://localhost:1337
+      NUXT_PUBLIC_NHOST_AUTH_URL: http://localhost:1337/v1/auth
+      NUXT_PUBLIC_NHOST_STORAGE_URL: http://localhost:1337/v1/storage
+      NUXT_PUBLIC_NHOST_FUNCTIONS_URL: http://localhost:1337/v1/functions
+      NUXT_PUBLIC_NHOST_DASHBOARD_URL: http://localhost:1337
+      NHOST_DATABASE_URL: postgres://postgres:postgres@postgres:5432/local
+      APP_TITLE: "Qrcode NoMoney"
+      APP_DESCRIPTION: "Gestion des cantines scolaires 2025"
+      APP_LOGO: /logo.png
+      BASE_URL: http://localhost:3000
+      PORT: 3000
+    volumes:
+      - .:/app
+    depends_on:
+      - nhost
+
+volumes:
+  postgres_data:

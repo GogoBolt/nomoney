@@ -1,0 +1,4 @@
+- "!include public_profiles.yaml"
+- "!include public_students.yaml"
+- "!include public_qr_codes.yaml"
+- "!include public_transactions.yaml"
