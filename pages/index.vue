@@ -26,10 +26,9 @@
           </div>
           <div class="md:w-1/2 flex justify-center">
             <img
-              src="~/assets/images/logo1.png"
-              style="height: 300px; width: 350px"
+              src="/images/logo.png"
               alt="NO-Money Just QR-Code"
-              class="w-full drop-shadow-lg animate-fade-in"
+              class="w-full max-w-md drop-shadow-lg animate-fade-in"
             />
           </div>
         </div>
@@ -101,15 +100,6 @@
         </NuxtLink>
       </div>
     </section>
-
-    <!-- Footer Section -->
-    <footer class="py-8 bg-gray-800 text-white">
-      <div class="container mx-auto px-4 text-center">
-        <p class="text-sm">
-          &copy; {{ new Date().getFullYear() }} NO-Money Just QR-Code. Tous droits réservés.
-        </p>
-      </div>
-    </footer>
   </div>
 </template>
 
@@ -174,5 +164,9 @@ const steps = ref([
     opacity: 1;
     transform: translateY(0);
   }
+}
+
+.btn {
+  @apply px-4 py-2 rounded-md font-medium transition-colors duration-200;
 }
 </style>

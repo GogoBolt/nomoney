@@ -1,19 +1,16 @@
 <template>
   <header class="fixed top-0 left-0 w-full bg-white shadow-md z-50">
-    <!-- Effet de vague -->
-    <!-- <div class="absolute inset-x-0 -bottom-3">
-      <svg class="w-full h-6 text-primary" viewBox="0 0 1440 320" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-        <path fill-opacity="1" d="M0,224L60,234.7C120,245,240,267,360,272C480,277,600,267,720,250.7C840,235,960,213,1080,186.7C1200,160,1320,128,1380,112L1440,96L1440,320L1380,320C1320,320,1200,320,1080,320C960,320,840,320,720,320C600,320,480,320,360,320C240,320,120,320,60,320L0,320Z"></path>
-      </svg>
-    </div> -->
-
     <div class="container mx-auto px-6 py-4 relative z-10">
       <div class="flex items-center justify-between h-20">
         <!-- Logo et Nom -->
         <div class="flex items-center">
           <NuxtLink to="/" class="flex items-center space-x-3">
-            <img class="h-16 w-16 rounded-full shadow-md transform hover:scale-105 transition duration-300" src="~/assets/images/logo1.png" alt="NO-Money Just QR-Code" />
-            <span class="text-[#0070BA] font-extrabold text-2xl tracking-wide drop-shadow-lg">GogoSoft & Familly</span>
+            <img 
+              class="h-16 w-16 rounded-full shadow-md transform hover:scale-105 transition duration-300" 
+              src="/images/logo.png" 
+              alt="NO-Money Just QR-Code" 
+            />
+            <span class="text-[#0070BA] font-extrabold text-2xl tracking-wide drop-shadow-lg">GogoSoft</span>
           </NuxtLink>
         </div>
 
@@ -35,10 +32,10 @@
             ]"
             @click="setActiveButton('monthly')"
           >
-            <span>Connexion</span>
-            <svg v-if="activeButton === 'monthly'" class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+              <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd" />
             </svg>
+            <span class="md:inline hidden">Connexion</span>
           </button>
 
           <!-- Bouton Inscription -->
@@ -49,10 +46,10 @@
             ]"
             @click="setActiveButton('yearly')"
           >
-            <span>Inscription</span>
-            <svg v-if="activeButton === 'yearly'" class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+              <path d="M8 9a3 3 0 100-6 3 3 0 000 6zM8 11a6 6 0 016 6H2a6 6 0 016-6zM16 7a1 1 0 10-2 0v1h-1a1 1 0 100 2h1v1a1 1 0 102 0v-1h1a1 1 0 100-2h-1V7z" />
             </svg>
+            <span class="md:inline hidden">Inscription</span>
           </button>
         </div>
       </div>

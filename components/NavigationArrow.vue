@@ -34,7 +34,7 @@
 import { ref, onMounted, onUnmounted } from 'vue';
 
 // État pour la visibilité de la flèche
-const isVisible = ref(false); // Cachée par défaut
+const isVisible = ref(false);
 
 // État pour vérifier si l'utilisateur est en bas de la page
 const isAtBottom = ref(false);
@@ -49,13 +49,20 @@ const checkScrollPosition = () => {
     const scrollY = window.scrollY;
     const windowHeight = window.innerHeight;
     const documentHeight = document.documentElement.scrollHeight;
-
-    // Détecter si on est en haut ou en bas
-    const atTop = scrollY <= 50;
-    const atBottom = scrollY + windowHeight >= documentHeight - 50;
-
+    
+    // Marges pour éviter les tremblements
+    const topMargin = 100;
+    const bottomMargin = 100;
+    
+    // Détecter si on est en haut ou en bas avec une marge
+    const atTop = scrollY <= topMargin;
+    const atBottom = scrollY + windowHeight >= documentHeight - bottomMargin;
+    
+    // Mettre à jour les états
     isAtBottom.value = atBottom;
-    isVisible.value = atTop || atBottom; // Afficher uniquement en haut ou en bas
+    
+    // Afficher la flèche si on n'est pas tout en haut
+    isVisible.value = scrollY > topMargin;
   }, 100);
 };
 
@@ -75,10 +82,11 @@ const scrollToTop = () => {
 // Ajout des événements au scroll
 onMounted(() => {
   window.addEventListener('scroll', checkScrollPosition);
-  checkScrollPosition();
+  checkScrollPosition(); // Vérifier l'état initial
 });
 
 onUnmounted(() => {
+  if (scrollTimeout) clearTimeout(scrollTimeout);
   window.removeEventListener('scroll', checkScrollPosition);
 });
 </script>

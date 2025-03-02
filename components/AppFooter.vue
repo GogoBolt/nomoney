@@ -1,12 +1,16 @@
 <template>
-  <footer  :class="[
+  <footer  
+    :class="[
       'bg-gray-800 text-white py-8 transition-all duration-300',
-      isFooterExpanded ? 'h-auto' : 'h-24 overflow-hidden'
-    ]" >
+      isFooterExpanded ? 'h-auto' : 'h-auto overflow-hidden'
+    ]"
+  >
     <div class="container mx-auto px-4">
       <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
         <div>
-          <img src="~/assets/images/logo-white.svg" alt="NO-Money Just QR-Code" class="h-10 mb-4" />
+          <div class="h-10 mb-4 flex items-center">
+            <span class="text-white text-xl font-bold">NO-Money Just QR-Code</span>
+          </div>
           <p class="text-gray-400">Simplifiez la gestion de votre cantine et transport scolaire avec notre solution QR Code.</p>
         </div>
         <div>
@@ -42,13 +46,15 @@
 import { ref, onMounted, onUnmounted } from 'vue';
 
 // État pour vérifier si le footer doit être étendu
-const isFooterExpanded = ref(false);
+const isFooterExpanded = ref(true);
 
 // Fonction pour vérifier si l'utilisateur est en bas de la page
 const checkIfAtBottom = () => {
   const scrollY = window.scrollY;
   const windowHeight = window.innerHeight;
   const documentHeight = document.documentElement.scrollHeight;
+  
+  // Utiliser une marge de 100px pour éviter les tremblements
   isFooterExpanded.value = scrollY + windowHeight >= documentHeight - 100;
 };
 

@@ -1,17 +1,14 @@
 <template>
-  <div class="min-h-screen flex items-center justify-center bg-gray-100">
+  <div class="min-h-screen flex items-center justify-center bg-gray-100 py-8">
     <div class="w-full max-w-md">
       <div class="text-center mb-3">
         <NuxtLink to="/" class="inline-block">
-          <div class="flex items-center">
-            <NuxtLink to="/" class="flex items-center space-x-3">
-              <img
-                class="rounded-lg shadow-md transform hover:scale-105 transition duration-300"
-                :src="selectedImage"
-                alt="NO-Money Just QR-Code"
-                loading="lazy"
-              />
-            </NuxtLink>
+          <div class="flex items-center justify-center">
+            <img
+              class="rounded-lg shadow-md transform hover:scale-105 transition duration-300 h-20 w-20"
+              :src="selectedImage"
+              alt="NO-Money Just QR-Code"
+            />
           </div>
         </NuxtLink>
       </div>
@@ -25,13 +22,10 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue';
 
-// Liste des images disponibles (utilisez des formats optimisés comme WebP)
+// Liste des images disponibles
 const images = [
-  '/images/1.jpg',
-  '/images/2.jpg',
-  '/images/3.jpg',
-  '/images/4.jpg',
-  '/images/5.jpg',
+  '/images/logo.png',
+  '/images/ab.png', 
 ];
 
 // Référence pour stocker l'image sélectionnée
